@@ -1,36 +1,10 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+实际运行误差较大。
+在每次计算摆的移动角度时存在误差，对每时间切片的角度偏转用wt+1/2at^2做10 000分割的欧拉方法积分计算。这部分有一定计算量，不过执行时间在1毫秒以内。
+到100 000的话可能有四五毫秒的样子，每次摆动的终点位置也有波动，且有增加的趋势。不做积分时，摆动会荡秋千，越来越快，不久开始绕圆心旋转。
+setTimeOut是一个不准确计时，只能保证回调在经过设定的时间后调用d，结果并不稳定。
+在每次时间切片是0.467时，大概需要17次（偶尔16次）回调完成一次单向摆动，这17次的完成时间有几十毫秒的波动。
+（由此计算的初始角度45度，摆长1米的摆单向运动一次用时7.9秒，准确度未知，问chatGPT，chatGPT罢工┑(￣Д ￣)┍）
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+动力系统模拟理想条件下的单摆运动（没有用简谐模型）。
+由重力与时间的累积计算得到每步计算的移动角度，累加移动角度模拟运动形成周期，
+其他部分的抽象有些简单，擒纵的作用抽象只是一个布尔变量，齿轮可以抽象为取模操作。
